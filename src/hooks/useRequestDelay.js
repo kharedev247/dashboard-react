@@ -28,20 +28,25 @@ function useRequestDelay(delayTime = 1000, initialData = []) {
   }, []);
 
   function updateRecord(recordUpdated, doneCallback) {
+    const originalRecords = [...data];
     const newRecords = data.map(function (rec) {
       return rec.id === recordUpdated.id ? recordUpdated : rec;
     });
 
     async function delayFunction() {
       try {
+        setData(newRecords);
         await delay(delayTime);
         if (doneCallback) {
           doneCallback();
         }
-        setData(newRecords);
       } catch (error) {
         console.error("error thrown inside delay function", error);
         // this should be used to rollback our record update
+        if (doneCallback) {
+          doneCallback();
+        }
+        setData(originalRecords);
       }
     }
     delayFunction();
