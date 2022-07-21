@@ -1,9 +1,6 @@
-import { createContext } from "react";
 import Layout from "./Layout";
 import Header from "./Header";
 import Speakers from "./Speakers";
-
-export const ThemeContext = createContext();
 
 function App() {
   return (
