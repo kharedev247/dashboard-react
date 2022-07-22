@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, memo } from "react";
 import { SpeakerFilterContext } from "../contexts/SpeakerFilterContext";
 import { SpeakerProvider, SpeakerContext } from "../contexts/SpeakerContext";
 import SpeakerDelete from "./SpeakerDelete";
@@ -33,18 +33,17 @@ function Sessions() {
   );
 }
 
-function ImageWithFallback({src, ...props}){
+function ImageWithFallback({ src, ...props }) {
   const [error, setError] = useState(false);
   const [imgSrc, setImgSrc] = useState(src);
 
   function onError() {
-    if (!error)
-    {
+    if (!error) {
       setImgSrc("/images/speaker-99999.jpg");
       setError(true);
     }
   }
-  return <img src={imgSrc} {...props}  onError={onError}/>
+  return <img src={imgSrc} {...props} onError={onError} />;
 }
 
 function SpeakerImage() {
@@ -112,7 +111,7 @@ function SpeakerDemographics() {
       </div>
       <SpeakerFavorite />
       <div>
-        <p className="card-description">{bio}</p>
+        <p className="card-description">{bio.substr(0, 70)}</p>
         <div className="social d-flex flex-row mt-4">
           <div className="company">
             <h5>Company</h5>
@@ -128,11 +127,21 @@ function SpeakerDemographics() {
   );
 }
 
-function Speaker({ speaker, updateRecord, insertRecord, deleteRecord }) {
+const Speaker = memo(function Speaker({
+  speaker,
+  updateRecord,
+  insertRecord,
+  deleteRecord,
+}) {
   const { showSessions } = useContext(SpeakerFilterContext);
 
   return (
-    <SpeakerProvider speaker={speaker} updateRecord={updateRecord} insertRecord={insertRecord} deleteRecord={deleteRecord}>
+    <SpeakerProvider
+      speaker={speaker}
+      updateRecord={updateRecord}
+      insertRecord={insertRecord}
+      deleteRecord={deleteRecord}
+    >
       <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-sm-12 col-xs-12">
         <div className="card card-height p-4 mt-4">
           <SpeakerImage />
@@ -143,6 +152,10 @@ function Speaker({ speaker, updateRecord, insertRecord, deleteRecord }) {
       </div>
     </SpeakerProvider>
   );
+}, areEqualSpeaker);
+
+function areEqualSpeaker(prevProp, nextProps) {
+  return (prevProp.speaker.favorite === nextProps.speaker.favorite);
 }
 
 export default Speaker;
