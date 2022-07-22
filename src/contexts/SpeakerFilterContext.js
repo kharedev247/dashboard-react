@@ -3,12 +3,33 @@ import useSpeakerFilter from "../hooks/useSpeakerFilter";
 
 const SpeakerFilterContext = createContext();
 
-function SpeakerFilerProvider({ children, startingShowSessions = false }) {
-  const { showSessions, setShowSessions } =
-    useSpeakerFilter(startingShowSessions);
+function SpeakerFilerProvider({
+  children,
+  startingShowSessions = false,
+  startingEventYear = "2011",
+}) {
+  const {
+    showSessions,
+    setShowSessions,
+    eventYear,
+    setEventYear,
+    searchQuery,
+    setSearchQuery,
+    EVENT_YEARS
+  } = useSpeakerFilter(startingShowSessions, startingEventYear);
 
   return (
-    <SpeakerFilterContext.Provider value={{ showSessions, setShowSessions }}>
+    <SpeakerFilterContext.Provider
+      value={{
+        showSessions,
+        setShowSessions,
+        eventYear,
+        setEventYear,
+        searchQuery,
+        setSearchQuery,
+        EVENT_YEARS
+      }}
+    >
       {children}
     </SpeakerFilterContext.Provider>
   );

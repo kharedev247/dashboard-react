@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import { SpeakerFilterContext } from "../contexts/SpeakerFilterContext";
 
-function Session({ session }) {
-  const { title, room } = session;
+function Session({ title, room }) {
   return (
     <span className="session w-100">
       {title} <strong>Room: {room.name}</strong>
@@ -11,9 +10,20 @@ function Session({ session }) {
 }
 
 function Sessions({ sessions }) {
+  const { eventYear } = useContext(SpeakerFilterContext);
   return (
     <div className="sessionBox card h-250">
-      <Session session={sessions[0]} />
+      {sessions
+        .filter(function (session) {
+          return session.eventYear === eventYear;
+        })
+        .map(function (session) {
+          return (
+            <div className="session w-100" key={session.id}>
+              <Session {...session} />
+            </div>
+          );
+        })}
     </div>
   );
 }
