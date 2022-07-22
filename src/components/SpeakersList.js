@@ -2,7 +2,7 @@ import Speaker from "./Speaker";
 import { data } from "../../SpeakerData";
 import useRequestDelay, { REQUEST_STATUS } from "../hooks/useRequestDelay";
 
-function SpeakersList({ showSession }) {
+function SpeakersList() {
   const {
     data: speakersData,
     requestStatus,
@@ -26,7 +26,6 @@ function SpeakersList({ showSession }) {
             <Speaker
               key={speaker.id}
               speaker={speaker}
-              showSession={showSession}
               onFavoriteToggle={(doneCallback) => {
                 updateRecord(
                   { ...speaker, favorite: !speaker.favorite },
